@@ -24,30 +24,34 @@ exports.handleRequest = function (req, res) {
   });
 };
 
-var handlePost = function(req, res, url) {
-  if (url.slice(0,3) === 'url') {
-    url = url.slice(0,4);
-  }
-
-  if (url.slice(0,3) === 'www'){
-    processUrl(req, res, url);
-  }else{
-    helpers.serveAssets(res, path.join(archive.paths.siteAssets, 'index.html'));
-  }
+var handlePost = function(req, res, data) {
+    var url = data.slice(4);
+    processPost(req, res, url);
 };
 
 var handleGet = function (req, res) {
   if(req.url === '/'){
     helpers.serveAssets(res, path.join(archive.paths.siteAssets, 'index.html'));
-  } else if (req.url.slice(0,4) === '/www'){
-    processUrl(req, res, req.url.slice(1));
   } else {
     var myPath = path.join(archive.paths.siteAssets, req.url);
     fs.exists(myPath, function(exists) {
       if (exists) {
         helpers.serveAssets(res, myPath);
       }else{
-        helpers.serve404(res);
+        var url = req.url.slice(1);
+        archive.isUrlArchived(url, function(urlArchived){
+          if (urlArchived){
+            helpers.serveAssets(res, path.join(archive.paths.archivedSites, url));
+          }else{
+            archive.isUrlInList(url, function(urlInList){
+              if (urlInList){
+                helpers.redirect(res, 'loading.html');
+              }else{
+                helpers.serve404(res);
+              }
+            });
+          }
+        });
       }
     });
 
@@ -57,24 +61,21 @@ var handleGet = function (req, res) {
 var noPathToArchive = function (req, res, url) {
   archive.isUrlInList(url, function(urlInList) {
     if(urlInList) {
-      var loadingPath = path.join(archive.paths.siteAssets, 'loading.html');
-      helpers.serveAssets(res, loadingPath);
+      helpers.redirect(res, 'loading.html');
     } else {
-      console.log("yoo");
       if (req.method === 'GET'){
         helpers.serve404(res);
       }else{
-        archive.addUrlToList(url);
-        helpers.redirect(res, url);
+        archive.addUrlToList(url, helpers.redirect.bind(helpers, res, url));
       }
     }
   });
 };
 
-var processUrl = function (req, res, url) {
+var processPost = function (req, res, url) {
   archive.isUrlArchived(url, function (urlArchived) {
     if (urlArchived) {
-      helpers.serveAssets(res, path.join(archive.paths.archivedSites, url));
+      helpers.redirect(res, url);
     } else {
       noPathToArchive(req, res, url);
     }

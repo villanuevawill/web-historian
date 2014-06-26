@@ -2,16 +2,26 @@ www.google.com
 
 www.gmail.com
 
-www.gmail.com
+www.cnn.com
 
-www.gmail.com
+www.msn.com
 
-www.gmail.com
+www.nytimes.com
 
-www.gmail.com
+www.facebook.com
 
-www.gmail.com%2C
+cnn.com
 
-www.gmail.com
+www.ajaytungare.com
 
-www.gmail.com
+www.willvillanueva.com
+
+www.reddit.com
+
+www.nmt.edu
+
+www.hackreactor.com
+
+mes=+reddit.com%2BTwoXChromosomes%2Bvideos%2Btodayilearned%2Bgadgets%2Bbooks%2BMusic%2BDIY%2BEarthPorn%2BInternetIsBeautiful%2Bfunny%2BOldSchoolCool%2Bmovies%2BIAmA%2BShowerthoughts%2Bsports%2Bworldcup%2Bworldnews%2Bexplainlikeimfive%2Bgaming%2Bgifs%2Bfood%2Baskscience%2BFuturology%2BUpliftingNews%2Baww%2BLifeProTips%2BFitness%2Bnews%2Bphotoshopbattles%2Btelevision%2BWritingPrompts%2BArt%2Bscience%2Bdataisbeautiful%2Bpersonalfinance%2Bcreepy%2Bpics%2Bnosleep%2BAskReddit%2Blistentothis%2BGetMotivated%2Bhistory&r=
+
+t=View&data=%7B%22url%22%3A%22%2Fwww.hackreactor.com%22%2C%22viewportInnerHeight%22%3A985%2C%22viewportInnerWidth%22%3A1905%2C%22screenHeight%22%3A1080%2C%22screenWidth%22%3A1920%2C%22userAgent%22%3A%22Mozilla%2F5.0%20(Macintosh%3B%20Intel%20Mac%20OS%20X%2010_9_2)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F35.0.1916.153%20Safari%2F537.36%22%2C%22referrer%22%3A%22%22%2C%22pixelRatio%22%3A1%2C%22title%22%3A%22Hack%20Reactor%20-%20The%20CS%20Degree%20for%20the%2021st%20Century%22%2C%22collectionId%22%3A%22528bb503e4b009fd592fe6a5%22%2C%22websiteId%22%3A%22522a22cbe4b04681b0bff826%22%2C%22templateId%22%3A%22522a22cce4b04681b0bff832%22%7D
