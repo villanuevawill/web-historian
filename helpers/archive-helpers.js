@@ -32,10 +32,10 @@ exports.readListOfUrls = function(callback){
   });
 };
 
-exports.isUrlInList = function(url){
-  return exports.readListOfUrls(function(urlArray){
+exports.isUrlInList = function(url, callback){
+  callback(exports.readListOfUrls(function(urlArray){
     return urlArray.indexOf(url) > -1;
-  });
+  }));
 };
 
 exports.addUrlToList = function(url){
@@ -46,8 +46,10 @@ exports.addUrlToList = function(url){
   });
 };
 
-exports.isUrlArchived = function(url){
-  return fs.existsSync(path.join(exports.paths.archivedSites, url));
+exports.isUrlArchived = function(url, callback){
+  fs.exists(path.join(exports.paths.archivedSites, url), function(exists) {
+    return callback(exists);
+  });
 };
 
 exports.downloadUrls = function(){

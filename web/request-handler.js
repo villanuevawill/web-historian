@@ -24,8 +24,11 @@ exports.handleRequest = function (req, res) {
   });
 };
 
-var handlePost = function(req, res, data) {
-  var url = data.slice(4);
+var handlePost = function(req, res, url) {
+  if (url.slice(0,3) === 'url') {
+    url = url.slice(0,4);
+  }
+
   if (url.slice(0,3) === 'www'){
     processUrl(req, res, url);
   }else{
@@ -52,26 +55,30 @@ var handleGet = function (req, res) {
 };
 
 var noPathToArchive = function (req, res, url) {
-  if(archive.isUrlInList(url)) {
-    var loadingPath = path.join(archive.paths.siteAssets, 'loading.html');
-    helpers.serveAssets(res, loadingPath);
-  } else {
-    if (req.method === 'GET'){
-      helpers.serve404(res);
-    }else{
-      archive.addUrlToList(url);
-      helpers.redirect(res, url);
+  archive.isUrlInList(url, function(urlInList) {
+    if(urlInList) {
+      var loadingPath = path.join(archive.paths.siteAssets, 'loading.html');
+      helpers.serveAssets(res, loadingPath);
+    } else {
+      console.log("yoo");
+      if (req.method === 'GET'){
+        helpers.serve404(res);
+      }else{
+        archive.addUrlToList(url);
+        helpers.redirect(res, url);
+      }
     }
-  }
+  });
 };
 
 var processUrl = function (req, res, url) {
-  if(archive.isUrlArchived(url)) {
-    helpers.serveAssets(res, path.join(archive.paths.archivedSites, url));
-  } else {
-    console.log(url);
-    noPathToArchive(req, res, url);
-  }
+  archive.isUrlArchived(url, function (urlArchived) {
+    if (urlArchived) {
+      helpers.serveAssets(res, path.join(archive.paths.archivedSites, url));
+    } else {
+      noPathToArchive(req, res, url);
+    }
+  });
 };
 
 
