@@ -55,16 +55,16 @@ exports.isUrlArchived = function(url, callback){
   db.query("SELECT HTML from sites where url=\'"+url+"\'", function(err, dbArray){
     var archived;
 
-    if (dbArray = undefined){
+    if (dbArray === undefined){
       archived = false;
-    }
-    }else if (dbArray.length === 0) {
+    } else if (dbArray.length === 0) {
       archived = false;
     } else if (dbArray[0]["HTML"]) {
       archived = true;
     } else {
       archived = false;
     }
+
     return callback(archived);
   });
 };
@@ -75,7 +75,7 @@ exports.downloadUrls = function(urlArray){
       if (!urlArchived) {
         var httpPath = 'http://' + url;
         httpRequest.get(httpPath, function(err, res){
-          db.query("UPDATE sites SET HTML=\'"+res.buffer+"\' WHERE url=\'"+url+"\';", function(err, result){
+          db.query("UPDATE sites SET HTML=\'"+JSON.stringify(res.buffer)+"\' WHERE url=\'"+url+"\';", function(err, result){
             console.log(err)
           });
         });
