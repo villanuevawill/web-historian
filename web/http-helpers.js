@@ -1,6 +1,9 @@
 var path = require('path');
 var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
+var mysql = require('mysql');
+var db = mysql.createConnection({user:'root', database:'WILLAJAY'});
+
 
 exports.headers = headers = {
   "access-control-allow-origin": "*",
@@ -10,12 +13,21 @@ exports.headers = headers = {
   'Content-Type': "text/html"
 };
 
-exports.serveAssets = function(res, asset) {
+exports.serveCoreAssets = function(res, asset) {
   // Write some code here that helps serve up your static files!
   // (Static files are things like html (yours or archived from others...), css, or anything that doesn't change often.)
   fs.readFile(asset, {encoding: 'utf8'}, function(err, assetBody){
     res.writeHead(200, exports.headers);
     res.end(assetBody);
+  });
+};
+
+exports.serveAssets = function(res, url) {
+
+  db.query("SELECT HTML from sites WHERE url = \'"+url+"\'", function(err, dbArray){
+    var html = new Buffer(JSON.parse(dbArray[0]['HTML'])).toString();
+    res.writeHead(200, exports.headers);
+    res.end(html);
   });
 };
 

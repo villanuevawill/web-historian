@@ -5,6 +5,7 @@
   "author": "Hack Reactor",
   "license": "Copyright 2013, Hack Reactor. All rights reserved.",
   "dependencies": {
+    "mysql": "^2.3.2",
     "q": "^1.0.1"
   },
   "devDependencies": {

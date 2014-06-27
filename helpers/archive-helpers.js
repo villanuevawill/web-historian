@@ -2,6 +2,8 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 var httpRequest = require('http-request');
+var mysql = require('mysql');
+var db = mysql.createConnection({user:'root', database:'WILLAJAY'});
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -23,12 +25,16 @@ exports.initialize = function(pathsObj){
   });
 };
 
+
+
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(callback){
-  fs.readFile(exports.paths.list,'utf8', function(err, siteList){
-    var urlArray = siteList ? siteList.split('\n') : [];
+  db.query("SELECT url from sites", function(err, dbArray){
+    var urlArray = _.map(dbArray, function (urlObj) {
+      return urlObj['url'];
+    });
     return callback(urlArray);
   });
 };
@@ -40,18 +46,26 @@ exports.isUrlInList = function(url, callback){
 };
 
 exports.addUrlToList = function(url, callback){
-  exports.readListOfUrls(function(urlArray){
-    urlArray.push(url);
-    var newSiteList = urlArray.join('\n') + '\n';
-    fs.writeFile(exports.paths.list, newSiteList, function(err){
-      callback();
-    });
-  });
+  db.query("INSERT INTO sites (url) values (\'"+url+"\')", function() {
+    callback();
+  })
 };
 
 exports.isUrlArchived = function(url, callback){
-  fs.exists(path.join(exports.paths.archivedSites, url), function(exists) {
-    return callback(exists);
+  db.query("SELECT HTML from sites where url=\'"+url+"\'", function(err, dbArray){
+    var archived;
+
+    if (dbArray = undefined){
+      archived = false;
+    }
+    }else if (dbArray.length === 0) {
+      archived = false;
+    } else if (dbArray[0]["HTML"]) {
+      archived = true;
+    } else {
+      archived = false;
+    }
+    return callback(archived);
   });
 };
 
@@ -60,7 +74,11 @@ exports.downloadUrls = function(urlArray){
     exports.isUrlArchived(url, function(urlArchived){
       if (!urlArchived) {
         var httpPath = 'http://' + url;
-        httpRequest.get(httpPath, path.join(exports.paths.archivedSites, url), function(){});
+        httpRequest.get(httpPath, function(err, res){
+          db.query("UPDATE sites SET HTML=\'"+res.buffer+"\' WHERE url=\'"+url+"\';", function(err, result){
+            console.log(err)
+          });
+        });
       }
     });
   });

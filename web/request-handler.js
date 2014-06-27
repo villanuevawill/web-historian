@@ -31,17 +31,17 @@ var handlePost = function(req, res, data) {
 
 var handleGet = function (req, res) {
   if(req.url === '/'){
-    helpers.serveAssets(res, path.join(archive.paths.siteAssets, 'index.html'));
+    helpers.serveCoreAssets(res, path.join(archive.paths.siteAssets, 'index.html'));
   } else {
     var myPath = path.join(archive.paths.siteAssets, req.url);
     fs.exists(myPath, function(exists) {
       if (exists) {
-        helpers.serveAssets(res, myPath);
+        helpers.serveCoreAssets(res, myPath);
       }else{
         var url = req.url.slice(1);
         archive.isUrlArchived(url, function(urlArchived){
           if (urlArchived){
-            helpers.serveAssets(res, path.join(archive.paths.archivedSites, url));
+            helpers.serveAssets(res, url);
           }else{
             archive.isUrlInList(url, function(urlInList){
               if (urlInList){
